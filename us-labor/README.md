@@ -4,6 +4,6 @@ Data obtained from the [U.S. BUREAU OF LABOR STATISTICS](https://www.bls.gov/cps
 
 <p align="center">
   <a href="https://pjoachims.github.io/viz/us-labor/labor-women.html">
-    <img src="labor-women.png" alt="How many women work in which job sector?" width="500"/>
+    <img src="labor-women.png" alt="How many women work in which job sector?" width="700"/>
   </a>
 </p>
