@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import plotly
 import plotly.express as px
 import dash
 from dash import html, dcc
@@ -15,17 +16,18 @@ df["Parent"] = "None"
 df.reset_index(inplace=True, drop=True)
 df.Total = df.Total.astype(int)
 
-# Replace "-" with 50 for women?
-df.loc[df["Women (%)"] == '–', "Women (%)"] = 50
-df["Women (%)"] = df["Women (%)"].astype(float)
-
 # Find parents for all elements
 for i, occ in df.iterrows():
     idx_parent = np.argwhere((df.loc[:i, "Tree_level"] == (occ.Tree_level - 1)).values)
     try:
         df.loc[i, "Parent"] = df.loc[idx_parent[-1][0], "Occupation"]
+        if occ["Women (%)"] == '–':
+            # Replace missing percentages with parent percentage
+            df.loc[i, "Women (%)"] = df.loc[idx_parent[-1][0], "Women (%)"]
     except IndexError:
         df.loc[i, "Parent"] = ""
+
+df["Women (%)"] = df["Women (%)"].astype(float)
 
 # Make sure total is sum of childs
 for level in [4, 3, 2, 1, 0]:
@@ -45,28 +47,47 @@ fig = px.sunburst(
     color_continuous_scale='RdYlGn',
     color_continuous_midpoint=50,
     color='Women (%)',
-    width=1000, 
-    height=1000,
+    width=950, 
+    height=950,
     maxdepth=3,
+    title="Percentage of women per occupation (US 2020)",
 )
-fig.update_layout(margin = dict(t=0, l=0, r=0, b=0))
-
-# Build app with dash
-app = dash.Dash()
-app.layout = html.Div([
-    html.Div(
-        className="app-header",
-        children=[
-            html.Div('Percentage of women per occupation (US 2020)', className="app-header--title")
-        ]
-    ),
-    html.Br(),
-    dcc.Link(href="https://www.bls.gov/cps/cpsaat11.htm", title="US Bureau"),
-    html.Div('* Unspecified values (-) replaced with 50%'),
-    dcc.Graph(figure=fig)
-])
+fig.update_layout(margin=dict(l=0), paper_bgcolor="#ffffff")
+fig.add_annotation(
+    text="Data obtained from the <a href='https://www.bls.gov/cps/cpsaat11.htm'> U.S. BUREAU OF LABOR STATISTICS </a>.",
+    xref="paper", yref="paper",
+    x=0.07, y=1.04, showarrow=False
+)
+fig.add_annotation(
+    text="* Unspecified values (-) replaced with parent percentages.",
+    xref="paper", yref="paper",
+    x=0.07, y=1.02, showarrow=False
+)
 
 
-if __name__ == '__main__':
-    app.run_server(debug=True)
-    server = app.server
+plotly.offline.plot(
+    fig, 
+    filename='labor-women.html',
+)
+
+
+
+# # Build app with dash
+# app = dash.Dash()
+# app.layout = html.Div([
+#     html.Div(
+#         className="app-header",
+#         children=[
+#             html.Div('Percentage of women per occupation (US 2020)', className="app-header--title")
+#         ]
+#     ),
+#     html.Br(),
+#     dcc.Link(href="https://www.bls.gov/cps/cpsaat11.htm", title="US Bureau"),
+#     html.Div('* Unspecified values (-) replaced with 50%'),
+#     dcc.Graph(figure=fig)
+# ])
+
+
+# if __name__ == '__main__':
+#     app.run_server(debug=True)
+#     server = app.server
