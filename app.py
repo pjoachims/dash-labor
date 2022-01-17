@@ -5,7 +5,7 @@ import dash
 from dash import html, dcc
 
 # Read csv and delete rows without occupation or tree level (1)
-df = pd.read_csv("cpsaat11.csv", skiprows=6, sep=",", thousands=r',')
+df = pd.read_csv("data/cpsaat11.csv", skiprows=6, sep=",", thousands=r',')
 df.columns = ["Occupation", "Total", "Women (%)", "White", "Black_or_african_american", "Asian", "Hispanic_or_latino", "Tree_level"]
 df.loc[0, "Occupation"] = "Total"
 df = df[~df.Occupation.isna()]
