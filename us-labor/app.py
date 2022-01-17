@@ -64,9 +64,20 @@ fig.add_annotation(
     x=0.07, y=1.02, showarrow=False
 )
 
+config = {
+  'toImageButtonOptions': {
+    'format': 'png',
+    'filename': 'us-labor',
+    'height': 1000,
+    'width': 1000,
+    'scale': 2,
+  }
+}
+
 plotly.offline.plot(
     fig, 
     filename='labor-women.html',
+    config=config
 )
 
 # # Build app with dash
