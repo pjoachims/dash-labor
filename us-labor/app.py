@@ -1,3 +1,5 @@
+
+import textwrap
 import pandas as pd
 import numpy as np
 import plotly
@@ -15,6 +17,10 @@ df.Tree_level = df.Tree_level.astype(int)
 df["Parent"] = "None"
 df.reset_index(inplace=True, drop=True)
 df.Total = df.Total.astype(int)
+
+def linebreaker(s, w: int = 25):
+    return "<br>".join(textwrap.wrap(s, width=w))
+df["Occupation"] = df["Occupation"].map(linebreaker)
 
 # Find parents for all elements
 for i, occ in df.iterrows():
