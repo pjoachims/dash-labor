@@ -64,13 +64,10 @@ fig.add_annotation(
     x=0.07, y=1.02, showarrow=False
 )
 
-
 plotly.offline.plot(
     fig, 
     filename='labor-women.html',
 )
-
-
 
 # # Build app with dash
 # app = dash.Dash()
@@ -86,7 +83,6 @@ plotly.offline.plot(
 #     html.Div('* Unspecified values (-) replaced with 50%'),
 #     dcc.Graph(figure=fig)
 # ])
-
 
 # if __name__ == '__main__':
 #     app.run_server(debug=True)
