@@ -47,7 +47,7 @@ fig = px.sunburst(
     color='Women (%)',
     width=1000, 
     height=1000,
-    maxdepth=5,
+    maxdepth=3,
 )
 fig.update_layout(margin = dict(t=0, l=0, r=0, b=0))
 
